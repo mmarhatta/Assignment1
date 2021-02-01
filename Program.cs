@@ -162,6 +162,11 @@ namespace Assignment1
                 {
                     return true;
                 }
+
+                if (C == 1)// If the number entered is 1, then it should return True as 1 =1^2+0^2
+                {
+                    return true;
+                }
                 for (i = C; i >= 0; i--)// Finding the largest number in reverse that is a perfect square, for eg: If enetered number is 29, code will check in reverse order till it finds number
                                         //25 which is the perfect square 
                 {
