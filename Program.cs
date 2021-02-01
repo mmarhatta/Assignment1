@@ -38,11 +38,10 @@ namespace Assignment1
             }
 
             //Question 4:
-            int[] arr = { 3, 1, 4, 1, 5 };
+            int[] arr = { 3, 1, 4, 1, 5, 3, 1, 3, 5 };
             Console.WriteLine("Q4: Enter the absolute difference to check");
             int k = Convert.ToInt32(Console.ReadLine());
             int n4 = diffPairs(arr, k);
-            Console.WriteLine("the sorted array is", arr);
             Console.WriteLine("There exists {0} pairs with the given difference", n4);
 
             //Question 5:
@@ -79,22 +78,22 @@ namespace Assignment1
                 int k;
                 for (i = 1; i <= n; i++)
                 {
-                    for (k = 1; k <= n - i; k++)
+                    for (k = 1; k <= n - i; k++)// No of spaces follow a patter where we have to print them in a sequence of n(total lines to print - the current line number )
                     {
                         Console.Write(" ");
 
                     }
 
-                    for (j = 1; j <= 2 * i - 1; j++)
+                    for (j = 1; j <= 2 * i - 1; j++)// No of *s to be printed are in a count that follow a patter of 2* row number -1, so after space print *s
                     {
                         Console.Write("*");
                     }
 
-                    Console.WriteLine();
+                    Console.WriteLine();//After printing the spaces and *s in a line we need to change the line for next iteration.
                 }
             }
 
-            catch (Exception)
+            catch (Exception)// For invalid input, exception will be generated
             {
 
                 throw;
@@ -163,16 +162,17 @@ namespace Assignment1
                 {
                     return true;
                 }
-                for (i = C; i >= 0; i--)// Finding the largest number in reverse that is a perfect square
+                for (i = C; i >= 0; i--)// Finding the largest number in reverse that is a perfect square, for eg: If enetered number is 29, code will check in reverse order till it finds number
+                                        //25 which is the perfect square 
                 {
                     for (a = 0; a < C; a++)
                     {
                         if (a * a == i)
                         {
                             d = C - i;// Find the difference between the number enetered as input(C) and the squared value of the perfect square we found(i which is equal to a*a)
-                            for (b = 0; b < d; b++)
+                            for (b = 0; b < d; b++) //example 29-25 is 4, so now we will check id 4 is the square of some number starting from 0.
                             {
-                                if (b * b == d)// oonly if the remaining value is also a perfect square only then the function returns true, else it will continue till the last value of the difference.
+                                if (b * b == d)// only if the remaining value is also a perfect square only then the function returns true, else it will continue till the last value of the difference.
                                 {
                                     return true;
                                 }
@@ -192,7 +192,7 @@ namespace Assignment1
                     }
 
                 }
-                return false;
+                return false;// If the number cannot be expresses a sum of squares of 2 numbers, return false
             }
 
             catch (Exception)
@@ -208,48 +208,60 @@ namespace Assignment1
             {
                 int i;
                 int j;
+                bool flag = false;
                 int count = 0;
-                Array.Reverse(nums);
-                Debug.WriteLine(nums);
+                int checkdup = 0;
+                // Sorting the numbers are reversing the array to get the array sorted in descending order.
+                Array.Sort(nums);
                 Array.Reverse(nums);
 
-                // print all element of array 
-                foreach (int value in nums)
-                {
-                    Debug.Write(value + " ");
-                }
+                // If k is 0, the check the adjacent numbers in descendingly sorted list for equal number
                 if (k == 0)
                 {
                     for (i = 0; i <= nums.Length - 1; i++)
                     {
-                        for (j = i + 1; j < nums.Length - 1; j++)
+                        for (j = i + 1; j < nums.Length; j++)
                         {
-                            if (nums[i] == nums[j])
+                            if (nums[j] == nums[i])
                             {
-                                count = count + 1;
-
+                                //checkdup has initial value as 0, and updates only when the number occurs second time, it records the number that occured second time
+                                // This piece of code assigns "true" value to the flag if it finds the same number occuring twice.
+                                //In the next loop if it sees the occurance of same number this if block will not be entered because flag is true and nums[j] is equal to checkdup.
+                                //Hence this loop will only be entered if the first pair of same number is found(as in that case flag is false) or if the new duplicate number is 
+                                //different than the previous duplicate number because of the second part of the if condition.
+                                if (flag == false || nums[j] != checkdup)
+                                {
+                                    
+                                    count = count + 1;
+                                    checkdup = nums[j];
+                                    flag = true;
+                                }
+                            else continue;// continue the loop for rest of the elements
                             }
 
                             else
                             {
-                                continue;
+                                continue;// continue the loop for rest of the elements
                             }
                         }
                     }
-                    return count;
+                    return count;// returns the count of pairs which have a difference of 0
                 }
 
+                //For difference other than k=0, like k=1,2,3,4,5 etc, first take all the distinct numbers out as same numbers will only give a differnce of 0, which is not needed.
                 else
                 {
+                    nums = nums.Distinct().ToArray();
                     for (i = 0; i <= nums.Length - 1; i++)
                     {
-                        for (j = i + 1; j < nums.Length - 1; j++)
+                        for (j = i + 1; j < nums.Length; j++)// Compare the number with all the numbers after in the array
                         {
 
-                            if (nums[i] - nums[j] == k)
+                            if (nums[i] - nums[j] == k)// As the array is sorted, the difference of every number is being checked with the enetered value that is k,
+                                                       // if it matches then increase the count by 1, and if it doesnt continue with the other other elements and check.
                             {
-                                Debug.WriteLine(nums[i]);
-                                Debug.WriteLine(nums[j]);
+                                //Console.WriteLine(nums[i]);
+                                //Console.WriteLine(nums[j]);
                                 count = count + 1;
 
                             }
@@ -261,7 +273,7 @@ namespace Assignment1
                         }
                     }
 
-                    return count;
+                    return count;// At the end, return the distinct count of pairs.
                 }
             }
 
@@ -288,10 +300,22 @@ namespace Assignment1
                     int index = email.IndexOf('@');// We will separate local and domain value baased on the index of '@' character as the cut offpoint
                     local = email.Substring(0, index - 1); // store the substring from beginning till the character before @ as local
                     domain = email.Substring(index + 1);// store the substring from character after @ till the end as domain
-                    local = local.Substring(0, email.IndexOf('+')); //As anything after + character should be removed in local so we are storing values only till + 
-                    //local = local.Replace('.',' ' );
-                    local = local.Replace(".", string.Empty);//Replace any dot character in the local string with empty character
-                    // final_email.ToList();
+                    if (local.Contains('+'))
+                    {
+                        local = local.Substring(0, email.IndexOf('+')); //As anything after + character should be removed in local so we are storing values only till + 
+                    }
+                    else
+                    { 
+                        local = local; //  it local does not contain,+ character, do nothing, keep local as it is
+                    }
+
+                    if (local.Contains('.'))
+                        local = local.Replace(".", string.Empty);//Replace any dot character in the local string with empty character
+                    else
+                    {
+                        local = local; //  it local does not contain,. character, do nothing, keep local as it is
+                    }
+          
                     final_email = local + "@" + domain;// Join the local and domain together after all the cleansing.
                     final_email_list.Add(final_email);//Add all the elements to the list
                     //final_email.ToList();
